@@ -1,0 +1,15 @@
+var sheetId = "10cRazIuYC1hhpyAscc9_puWZSv0RoKMgkIdwi3qlXpk"; // Replace with your actual sheet ID
+var formId = "1LvSDU3EiAGfwaaLLM95zu5bc7kQRTAjcL-zGU1L1PuY"; // Replace with your actual form ID
+
+function myFunction() {
+  var ss = SpreadsheetApp.openById(sheetId);
+  var sheet = ss.getSheetByName("Form responses 1"); // Replace "Sheet1" with your sheet name
+  var form = FormApp.openById(formId);
+
+  // Pertanyaan Nama bertipe Teks biasa atau Short Answer
+  var data = [...new Set(sheet.getDataRange().getDisplayValues().map(row => row[3]))].join("|");
+  var item = form.getItems().filter(item => item.getTitle() == 'ID')[0].asTextItem();
+  var pattern = `(${data})`;
+  var textval = FormApp.createTextValidation().setHelpText("This Student ID is Already Registred").requireTextDoesNotMatchPattern(pattern).build();
+  item.setValidation(textval);
+}
